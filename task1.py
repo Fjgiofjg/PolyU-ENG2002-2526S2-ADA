@@ -37,11 +37,16 @@ class fixNum:
         return fixNum(result_scaled // 100, result_scaled % 100)
 
     def show(self):
-        sign = "-" if self.a < 0 else ""
-        print(f"{self.a}.{abs(self.b):02d}")
+        scaled = self._scaled()
+        sign = "-" if scaled < 0 else ""
+        abs_val = abs(scaled)
+        print(f"{sign}{abs_val // 100}.{abs_val % 100:02d}")
 
     def __str__(self):
-        return f"{self.a}.{self.b:02d}"
+        scaled = self._scaled()
+        sign = "-" if scaled < 0 else ""
+        abs_val = abs(scaled)
+        return f"{sign}{abs_val // 100}.{abs_val % 100:02d}"
 
 
 # ── Extra Task ─────────────────────────────────────────────────────────────────
@@ -76,15 +81,18 @@ def frac_to_binary(b, bits=8):
 
 def to_binary(num, int_bits=8, frac_bits=8):
     """Display the binary representation of a fixNum."""
-    negative = num.a < 0
-    abs_int = abs(num.a)
+    scaled = num._scaled()
+    negative = scaled < 0
+    abs_scaled = abs(scaled)
+    abs_int = abs_scaled // 100
+    frac_b = abs_scaled % 100
     int_bin = int_to_binary(abs_int, int_bits)
-    frac_bin = frac_to_binary(num.b, frac_bits)
+    frac_bin = frac_to_binary(frac_b, frac_bits)
     sign_str = "-" if negative else " "
     print(f"Binary representation of {num}:")
     print(f"  {sign_str}{int_bin}.{frac_bin}")
     print(f"  Integer part  : {sign_str}{int_bin} (= {abs_int})")
-    print(f"  Fractional part: .{frac_bin} (≈ {num.b / 100:.6f})")
+    print(f"  Fractional part: .{frac_bin} (≈ {frac_b / 100:.6f})")
 
 
 # ── Menu helpers ────────────────────────────────────────────────────────────────
